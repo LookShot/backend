@@ -1,4 +1,3 @@
-const express = require ('express');
 const bccrypt = require ('bcryptjs');
 const jwt = require ('jsonwebtoken');
 const crypto = require ('crypto');
@@ -8,18 +7,17 @@ const authConfig = require ('../../config/auth')
 const User = require('../models/User');
 const Token = require('../models/Token')
 
-const router = express.Router();
 
 function generatorToken (params = {}){
 
    return jwt.sign(params, authConfig.secret, {
         expiresIn:86400,
     });
-
-
 }
 
-router.post('/register', async (req, res) => {
+module.exports = {
+
+ async store (req, res){
     const { email } = req.body;
 
     try {
@@ -37,9 +35,9 @@ router.post('/register', async (req, res) => {
     } catch (err){
         return res.status(400).send({error: 'Registration failed'});
     }
-});
+},
 
-router.post('/authennticate', async (req, res)=>{
+ async authenticate(req, res){
     const {email, password}= req.body;
 
     const user = await User.findOne({ email }).select('+password');
@@ -59,18 +57,9 @@ router.post('/authennticate', async (req, res)=>{
         token: generatorToken({id: user.id}),
     });
 
-});
+},
 
-// router.post('/:id', async (req, res)=>{
-//     const id = req.param
-//     const user = await User.findOne()
-//     let token = generatorToken({id: user.id})
-
-//     res.send ({token: token})
-    
-// });
-
-router.post('/esqueci_senha', async(req, res) => {
+async forgotpassword(req, res) {
 
     const {email} = req.body;
 
@@ -110,9 +99,9 @@ router.post('/esqueci_senha', async(req, res) => {
         console.log(err);
         res.status(400).send ({error: 'Erro em tentar recuperar a senha, try again'});
     }
-});
+},
 
-router.post('/reset_password', async(req, res)=>{
+async reset_password(req, res){
     const {email, token, password}= req.body;
 
     try {
@@ -140,6 +129,21 @@ router.post('/reset_password', async(req, res)=>{
         console.log(error);
         res.status(400).send ({error: 'Não pode resetar a senha'});
     }
-}); 
+},
+async update (req, res){
 
-module.exports = app => app.use('/auth', router);
+    const {user} = await req.userId;
+
+    try {
+        await User.updateOne({user}, req.body)
+
+        const searcheUser = await User.findOne({user})
+        return res.send(searcheUser);
+        
+    } catch (error) {
+        console.log(error);
+        res.status(400).send ({error: 'Não pode atualizar os dados'});
+    }
+
+},
+}

@@ -1,5 +1,5 @@
-const mongoose = require('../../database');
-const PointSchema = require('../utils/PointSchema');
+const mongoose = require ('mongoose');
+const PointSchema = require('./utils/PointSchema');
 
 
 const CardSchema = new mongoose.Schema({
