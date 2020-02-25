@@ -14,6 +14,7 @@ const CardSchema = new mongoose.Schema({
     categoria: {
         type:String,
         required:true,
+        lowercase: true,
     },
     location:{
         type: PointSchema,

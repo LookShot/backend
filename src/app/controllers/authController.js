@@ -4,8 +4,11 @@ const crypto = require ('crypto');
 
 const mailer = require ('../../modules/mailer')
 const authConfig = require ('../../config/auth')
+
 const User = require('../models/User');
-const Token = require('../models/Token')
+const Post = require('../models/Post');
+const Card = require('../models/Card');
+
 
 
 function generatorToken (params = {}){
@@ -17,7 +20,7 @@ function generatorToken (params = {}){
 
 module.exports = {
 
- async store (req, res){
+async store (req, res){
     const { email } = req.body;
 
     try {
@@ -37,7 +40,25 @@ module.exports = {
     }
 },
 
- async authenticate(req, res){
+async update (req, res){
+
+    const user = await req.userId;
+
+    try {
+        await User.findByIdAndUpdate(user, req.body)
+
+        const searcheUser = await User.findById(user)
+        
+        return res.send(searcheUser);
+        
+    } catch (error) {
+        console.log(error);
+        res.status(400).send ({error: 'Não pode atualizar os dados'});
+    }
+
+},
+
+async authenticate(req, res){
     const {email, password}= req.body;
 
     const user = await User.findOne({ email }).select('+password');
@@ -56,6 +77,26 @@ module.exports = {
         user,
         token: generatorToken({id: user.id}),
     });
+
+},
+
+async logout(req, res){
+    const {logout}= req.body;
+
+    const authHeader = req.headers.authorization;
+
+    const parts = authHeader.split(' ');
+    const [scheme, token ]= parts;
+    
+   jwt.decode(token, {
+       expiresIn: Date.now
+   })
+
+     return res.send({token})
+
+     
+
+
 
 },
 
@@ -130,20 +171,21 @@ async reset_password(req, res){
         res.status(400).send ({error: 'Não pode resetar a senha'});
     }
 },
-async update (req, res){
 
-    const {user} = await req.userId;
-
+async buscar_user(req,res){
+     const {user_id} = req.params.id
+     const id = req.params.id
     try {
-        await User.updateOne({user}, req.body)
-
-        const searcheUser = await User.findOne({user})
-        return res.send(searcheUser);
+        const post  = await Post.find({user_id})
+        const user  = await User.findById(id)
+        const card  = await Card.find({user_id})
         
+        return res.send({user,card, post})
+    
     } catch (error) {
-        console.log(error);
-        res.status(400).send ({error: 'Não pode atualizar os dados'});
+        console.log(error)
+        return res.status(400).send ({error: 'Erro Loading dos dados do Usuário'});      
     }
-
 },
+
 }

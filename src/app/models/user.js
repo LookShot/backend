@@ -5,9 +5,11 @@ const UserSchema = new mongoose.Schema({
     name: {
         type: String,
         required:true,
-    },    
+    }, 
+     
     sobre: {
         type: String,
+        default:null
     },    
     email: {
         type: String,
