@@ -20,8 +20,6 @@ router.put ('/auth/updateuser',Auth, AuthController.update);
 
 router.get('/portifolio/:id', AuthController.buscar_user )
 
-router.get('/logout', AuthController.logout )
-
 
 //referente ao card do usuário
 router.get('/cards/card', Auth, CardController.cards_user)

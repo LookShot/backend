@@ -28,14 +28,15 @@ async creat_card_user (req, res){
 
      if (n_card.length <1){
         
-        const {name, description, categoria, location } = req.body;
+        const {name, description, categoria, location, cep } = req.body;
         const cards = await Card.create(
             {
             name,
             description,
             categoria,
             location,
-            user: user
+            user: user,
+            cep: cep
             });
 
         await cards.save();    

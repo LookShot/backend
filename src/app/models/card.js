@@ -20,12 +20,16 @@ const CardSchema = new mongoose.Schema({
         type: PointSchema,
         index: '2dsphere'
     },
+    cep:{
+        type: Number,
+        required: true,
+    },
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
     },
-    peso:{
+    curtida:{
         type: Number,
         default:0,
     },
