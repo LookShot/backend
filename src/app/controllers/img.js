@@ -6,7 +6,7 @@ module.exports = {
 async create_img (req, res) {
     const tipo = req.query.tipo;
     const user = await req.userId;
-    const fp = `${tipo}`
+    const fp = `${tipo}${user}`
     try {
         const{ size, key, location: url=""} = req.file
         const post = await Post.create({
