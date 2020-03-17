@@ -10,7 +10,19 @@ const UserSchema = new mongoose.Schema({
     sobre: {
         type: String,
         default:null
-    },    
+    }, 
+    contato: {
+        type: Number,
+        default:null
+    }, 
+    facebook: {
+        type: String,
+        default:null
+    }, 
+    instagram: {
+        type: String,
+        default:null
+    }, 
     email: {
         type: String,
         unique: true,

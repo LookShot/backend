@@ -80,26 +80,6 @@ async authenticate(req, res){
 
 },
 
-async logout(req, res){
-    const {logout}= req.body;
-
-    const authHeader = req.headers.authorization;
-
-    const parts = authHeader.split(' ');
-    const [scheme, token ]= parts;
-    
-   jwt.decode(token, {
-       expiresIn: Date.now
-   })
-
-     return res.send({token})
-
-     
-
-
-
-},
-
 async forgotpassword(req, res) {
 
     const {email} = req.body;
