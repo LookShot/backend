@@ -1,45 +1,49 @@
-const mongoose = require ('mongoose');
-const PointSchema = require('./utils/PointSchema');
-
+const mongoose = require("mongoose");
+const PointSchema = require("./utils/PointSchema");
 
 const CardSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: true
     },
     description: {
         type: String,
-        required:true,
+        required: true
     },
     categoria: {
-        type:String,
-        required:true,
-        lowercase: true,
+        type: String,
+        required: true,
+        lowercase: true
     },
-    location:{
+    location: {
         type: PointSchema,
-        index: '2dsphere'
+        index: "2dsphere"
     },
-    cep:{
+    cep: {
         type: Number,
-        required: true,
+        required: true
     },
-    user:{
+    user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+        ref: "User",
+        required: true
     },
-    curtida:{
+    curtida: {
         type: Number,
-        default:0,
+        default: 0
+    },
+    picture: {
+        type: String
+    },
+    phone: {
+        type: String
     },
     createdAt: {
         type: Date,
-        default: Date.now,
-    },
-
+        default: Date.now
+    }
 });
 
-const Card = mongoose.model('Card', CardSchema)
+const Card = mongoose.model("Card", CardSchema);
 
 module.exports = Card;
