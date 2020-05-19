@@ -109,5 +109,16 @@ module.exports = {
             console.log(error);
             return res.status(400).send({ error: "Erro Loading cardss" });
         }
+    }, 
+    
+    async cards_user(req, res) {
+
+        try {
+            const cards = await Card.find().populate("user");
+            return res.send({ cards });
+        } catch (error) {
+            console.log(error);
+            return res.status(400).send({ error: "Erro Loading cards" });
+        }
     }
 };
