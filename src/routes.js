@@ -23,7 +23,7 @@ router.get('/portifolio/:id', AuthController.buscar_user)
 
 
 //referente ao card do usuário
-router.get('/cards/card', Auth, CardController.cards_user)
+router.get('/cards/card', Auth, CardController.user_cards)
 router.get('/cards/todos', CardController.cards_user)
 router.post('/cards', Auth, CardController.creat_card_user)
 router.put('/cards/:cardId', Auth, CardController.update_card_user)

@@ -4,10 +4,10 @@ const parseStringAsArray = require("../../utils/parseStringAsArray");
 
 module.exports = {
     //Puxar todos o card de um usuário*** terminar//
-    async cards_user(req, res) {
+    async user_cards(req, res) {
         const user = req.userId;
         try {
-            const cards = await Card.find({ user });
+            const cards = await Card.find({ user }).populate("user"); //
             return res.send({ cards });
         } catch (error) {
             console.log(error);
@@ -63,11 +63,11 @@ module.exports = {
 
             const cards = await Card.findByIdAndUpdate(
                 req.params.cardId, {
-                    name,
-                    description,
-                    categoria,
-                    location
-                }, { new: true }
+                name,
+                description,
+                categoria,
+                location
+            }, { new: true }
             );
 
             return res.send({ cards });
@@ -96,21 +96,27 @@ module.exports = {
         try {
             const categoria = req.query.categoria;
 
-            const techsArray = parseStringAsArray(categoria);
+            const techsArray = parseStringAsArray(categoria || '');
+            let cards;
+            if (categoria) {
+                cards = await Card.find({
+                    categoria: {
+                        $in: techsArray
+                    }
+                }).populate("user");
+            } else {
+                cards = await Card.find({
 
-            const cards = await Card.find({
-                categoria: {
-                    $in: techsArray
-                }
-            }).populate("user");
+                }).populate("user");
+            }
 
             return res.send({ cards });
         } catch (error) {
             console.log(error);
             return res.status(400).send({ error: "Erro Loading cardss" });
         }
-    }, 
-    
+    },
+
     async cards_user(req, res) {
 
         try {
